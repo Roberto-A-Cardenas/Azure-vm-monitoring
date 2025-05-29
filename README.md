@@ -1,9 +1,11 @@
 # Azure VM Monitoring
 
-[![Terraform](https://img.shields.io/badge/IaC-Terraform-blueviolet?style=flat&logo=terraform)](https://www.terraform.io/)
-[![Azure](https://img.shields.io/badge/Cloud-Azure-0078D4?style=flat&logo=microsoft-azure)](https://azure.microsoft.com/)
-[![Monitoring](https://img.shields.io/badge/Monitoring-Enabled-green?style=flat&logo=datadog)](https://learn.microsoft.com/en-us/azure/azure-monitor/)
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
+[![IaC](https://img.shields.io/badge/IaC-Terraform-blueviolet)](https://developer.hashicorp.com/terraform)
+[![Cloud](https://img.shields.io/badge/Cloud-Azure-blue)](https://azure.microsoft.com/)
+[![Monitoring](https://img.shields.io/badge/Service-Monitoring-success)](https://learn.microsoft.com/en-us/azure/azure-monitor/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
 
 ## Overview
 
@@ -13,7 +15,7 @@ This project provisions a monitored Linux Virtual Machine in Microsoft Azure usi
 
 ## Architecture
 
-![Azure Diagram](./assets/azure-diagram.png)
+![Azure Diagram](./terraform/assets/azure-diagram.png)
 
 ---
 
@@ -25,108 +27,68 @@ This project provisions a monitored Linux Virtual Machine in Microsoft Azure usi
 - **Log Analytics Workspace**
 - **Boot Diagnostics**
 - **Azure Monitor + Alerts**
-- **Email Action Group (alert threshold: CPU > 70%)**
+- **Email Action Group**
 
 ---
 
-## File Structure
+## Folder Structure
 
 ```
 azure-vm-monitoring/
-├── terraform/
-│   ├── assets/
-│   │   ├── azure-diagram.png
-│   │   └── Azure-welcome-nginx.png
-│   ├── user-data/
-│   │   └── cloud-init.yaml
-│   ├── main.tf
-│   ├── monitoring.tf
-│   ├── network.tf
-│   ├── outputs.tf
-│   ├── provider.tf
-│   ├── random.tf
-│   ├── storage.tf
-│   ├── terraform.tfvars
-│   ├── variables.tf
-│   ├── versions.tf
-│   └── vm.tf
 ├── .gitignore
 ├── LICENSE
-└── README.md
+├── README.md
+└── terraform/
+    ├── assets/
+    │   └── azure-diagram.png
+    ├── user-data/
+    │   └── cloud-init.yaml
+    ├── main.tf
+    ├── monitoring.tf
+    ├── network.tf
+    ├── outputs.tf
+    ├── provider.tf
+    ├── random.tf
+    ├── storage.tf
+    ├── variables.tf
+    ├── versions.tf
+    └── vm.tf
 ```
 
 ---
 
-## Prerequisites
+## Setup Instructions
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads)
-- Azure CLI authenticated with `az login`
-- SSH key pair (`~/.ssh/id_rsa.pub` used in this setup)
-
----
-
-## How to Deploy
-
-1. **Clone this repository**
-
+1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/azure-vm-monitoring.git
+   git clone https://github.com/roberto-a-cardenas/azure-vm-monitoring.git
    cd azure-vm-monitoring/terraform
    ```
 
 2. **Initialize Terraform**
-
    ```bash
    terraform init
    ```
 
-3. **Review the execution plan**
-
+3. **Preview and apply changes**
    ```bash
    terraform plan
-   ```
-
-4. **Apply the configuration**
-
-   ```bash
    terraform apply
    ```
 
-5. **Monitor in Azure**
-
-   - Navigate to Azure Portal → Log Analytics → Logs
-   - Run sample KQL queries:
-     ```kusto
-     Perf | where ObjectName == "Processor" | sort by TimeGenerated desc | limit 10
-     Heartbeat | sort by TimeGenerated desc | limit 10
-     ```
-
 ---
 
-## Alert Configuration
+## Monitoring Details
 
-This setup includes:
-
-- A metric alert for CPU > 70% (5-minute window)
-- Action group that sends email to: `ac42213@gmaail.com`
-
----
-
-## Cleanup
-
-To remove all resources:
-
-```bash
-terraform destroy
-```
+- **Azure Monitor** tracks CPU utilization.
+- **Log Analytics Workspace** collects logs and metrics.
+- **Email alerts** are triggered when CPU > 70% for 5 minutes.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
----
+This project is licensed under the [MIT License](./LICENSE).
 
 ## Author
 
